@@ -5,10 +5,13 @@ A simple HTTP library for Client-Server communication.
 
 ## Success Criteria
 
-1. Stable
+1. Stable Library
+    > Adheres to **Stable Dependency Principle**
 2. Abstract Public APIs
+    > Adheres to **Stable Abstraction Principle**
 3. 90% code coverage
 4. Unit tests runtime has to be <= 200 milliseconds
+5. Instrumentation tests runtime has to be <= 2 seconds
 
 
 ## Use Cases

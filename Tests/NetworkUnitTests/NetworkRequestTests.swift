@@ -9,16 +9,18 @@ import Foundation
 import XCTest
 import Network
 import Combine
+import NetworkTestUtilities
 
 final class NetworkRequestTests: XCTestCase {
 
     private var service: NetworkRequesting!
     private var platform: MockURLSession!
-    private var bag: Set<AnyCancellable> = []
+    private var bag: Set<AnyCancellable>!
 
     override func setUp() {
         super.setUp()
 
+        bag = []
         platform = MockURLSession()
  
         let builder = NetworkServiceBuilder(platform: platform)

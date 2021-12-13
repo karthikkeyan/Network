@@ -15,7 +15,6 @@ public struct NetworkServiceBuilder {
     }
 
     public func build() -> NetworkRequesting {
-        let receiver = NetworkRequestReceiver(platform: platform)
-        return NetworkService(requestReceiver: receiver)
+        NetworkService(platform: platform)
     }
 }

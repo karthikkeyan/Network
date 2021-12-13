@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-extension Publisher {
+public extension Publisher {
     func start(with bag: inout Set<AnyCancellable>) {
         sink { completion in
         } receiveValue: { data in

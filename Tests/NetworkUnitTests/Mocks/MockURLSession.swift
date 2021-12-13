@@ -19,7 +19,7 @@ final class MockURLSession: NetworkPlatform {
         return .success((mockData, 200))
     }()
 
-    func performRequest(for request: URLRequest) -> AnyPublisher<(Data, URLResponse), URLError> {
+    func executeRequest(_ request: URLRequest) -> AnyPublisher<(Data, URLResponse), URLError> {
         recentRequest = request
 
         return Future<(Data, URLResponse), URLError>() { [weak self] promise in
