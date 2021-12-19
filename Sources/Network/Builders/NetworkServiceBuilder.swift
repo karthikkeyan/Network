@@ -9,12 +9,14 @@ import Foundation
 
 public struct NetworkServiceBuilder {
     private let platform: NetworkPlatform
+    private let infoProviders: [URLRequestInfoProviding]
 
-    public init(platform: NetworkPlatform) {
+    public init(platform: NetworkPlatform, infoProviders: [URLRequestInfoProviding]) {
         self.platform = platform
+        self.infoProviders = infoProviders
     }
 
     public func build() -> NetworkRequesting {
-        NetworkService(platform: platform)
+        NetworkService(platform: platform, infoProviders: infoProviders)
     }
 }

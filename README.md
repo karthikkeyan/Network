@@ -27,3 +27,7 @@ A simple HTTP library for Client-Server communication.
 3. Given a network service
     when an error occured during the network call
     then the error is returned with HTTP status code to the consumer.
+    
+4. Given a network service
+    when a request is received
+    then addition info is added to the request before it send to the server

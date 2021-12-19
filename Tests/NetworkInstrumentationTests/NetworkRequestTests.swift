@@ -22,7 +22,7 @@ final class NetworkRequestTests: XCTestCase {
         bag = []
 
         let platform = URLSession.shared
-        let builder = NetworkServiceBuilder(platform: platform)
+        let builder = NetworkServiceBuilder(platform: platform, infoProviders: [])
         service = builder.build()
     }
 

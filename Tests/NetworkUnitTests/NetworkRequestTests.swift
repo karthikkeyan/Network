@@ -16,14 +16,18 @@ final class NetworkRequestTests: XCTestCase {
     private var service: NetworkRequesting!
     private var platform: MockURLSession!
     private var bag: Set<AnyCancellable>!
+    private var sessionProvider: SessionProvider!
+    private var deviceInfoProvider: DeviceInfoProvider!
 
     override func setUp() {
         super.setUp()
 
         bag = []
         platform = MockURLSession()
+        sessionProvider = SessionProvider()
+        deviceInfoProvider = DeviceInfoProvider()
  
-        let builder = NetworkServiceBuilder(platform: platform)
+        let builder = NetworkServiceBuilder(platform: platform, infoProviders: [sessionProvider, deviceInfoProvider])
         service = builder.build()
     }
 
@@ -138,5 +142,27 @@ final class NetworkRequestTests: XCTestCase {
         let urlError = try XCTUnwrap(unwrappedError.underlyingError as? URLError)
         XCTAssertEqual(urlError.errorCode, URLError.badServerResponse.rawValue)
         XCTAssertEqual(unwrappedError.statusCode, NetworkError.unexpectedServerErrorCode)
+    }
+
+    func testGivenANetwokService_whenARequestIsReceived_thenAdditionlInfoIsAddedBeforeTheRequestIsSentToServer() throws {
+        let token = UUID().uuidString
+        let sessionHeaderKey = "X-SESSION-ID"
+        sessionProvider.headerKey = sessionHeaderKey
+        sessionProvider.token = token
+
+        let deviceType = "iPhone 12"
+        let deviceTypeHeaderKey = "X-DEVICE-TYPE"
+        deviceInfoProvider.headerKey = deviceTypeHeaderKey
+        deviceInfoProvider.deviceType = deviceType
+
+        let url = URL(string: "api.testservice.com/v1/path/to/endpoint")!
+        let request = URLRequest(url: url)
+        service
+            .send(request: request)
+            .start(with: &bag)
+
+        let recentRequest = try XCTUnwrap(platform.recentRequest)
+        XCTAssertEqual(recentRequest.allHTTPHeaderFields?[sessionHeaderKey], token)
+        XCTAssertEqual(recentRequest.allHTTPHeaderFields?[deviceTypeHeaderKey], deviceType)
     }
 }

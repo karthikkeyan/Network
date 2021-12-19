@@ -10,14 +10,21 @@ import Combine
 
 final class NetworkService: NetworkRequesting {
     private let platform: NetworkPlatform
+    private let infoProviders: [URLRequestInfoProviding]
 
-    init(platform: NetworkPlatform) {
+    init(platform: NetworkPlatform, infoProviders: [URLRequestInfoProviding]) {
         self.platform = platform
+        self.infoProviders = infoProviders
     }
 
     func send(request: URLRequest) -> AnyPublisher<NetworkResponse, NetworkError> {
-        platform
-            .executeRequest(request)
+        var finalRequest = request
+        for infoProvider in infoProviders {
+            finalRequest = infoProvider.addInfo(to: finalRequest)
+        }
+
+        return platform
+            .executeRequest(finalRequest)
             .tryMap { (data: Data, response: URLResponse) in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw NetworkError(error: URLError(.badServerResponse), statusCode: NetworkError.unexpectedServerErrorCode)
