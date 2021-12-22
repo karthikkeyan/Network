@@ -23,7 +23,8 @@ final class NetworkRequestTests: XCTestCase {
 
         let platform = URLSession.shared
         let builder = NetworkServiceBuilder(platform: platform, infoProviders: [])
-        service = builder.build()
+        let components = builder.build()
+        service = components.service
     }
 
     func testGivenANetworkService_whenAResponseIsReceivedFromServer_thenTheResponseIsReturnedToTheConsumer() throws {

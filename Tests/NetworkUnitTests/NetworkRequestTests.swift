@@ -28,7 +28,8 @@ final class NetworkRequestTests: XCTestCase {
         deviceInfoProvider = DeviceInfoProvider()
  
         let builder = NetworkServiceBuilder(platform: platform, infoProviders: [sessionProvider, deviceInfoProvider])
-        service = builder.build()
+        let components = builder.build()
+        service = components.service
     }
 
     func testGivenANetwokService_whenARequestIsReceived_thenTheRequestIsSentToServer() throws {

@@ -31,3 +31,15 @@ A simple HTTP library for Client-Server communication.
 4. Given a network service
     when a request is received
     then addition info is added to the request before it send to the server
+    
+5. Given a network service
+    when a request is received
+    then the final request is emitted to a request publisher
+    
+6. Given a network service
+    when a response is received from server
+    then the response is emitted to a response publisher
+
+7. Given a network service
+    when a error occured during the network call
+    then the error is emitted to a error publisher

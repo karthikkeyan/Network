@@ -11,10 +11,12 @@ import Combine
 final class NetworkService: NetworkRequesting {
     private let platform: NetworkPlatform
     private let infoProviders: [URLRequestInfoProviding]
+    private let eventSteam: NetworkEventStream
 
-    init(platform: NetworkPlatform, infoProviders: [URLRequestInfoProviding]) {
+    init(platform: NetworkPlatform, infoProviders: [URLRequestInfoProviding], eventSteam: NetworkEventStream) {
         self.platform = platform
         self.infoProviders = infoProviders
+        self.eventSteam = eventSteam
     }
 
     func send(request: URLRequest) -> AnyPublisher<NetworkResponse, NetworkError> {
@@ -23,25 +25,33 @@ final class NetworkService: NetworkRequesting {
             finalRequest = infoProvider.addInfo(to: finalRequest)
         }
 
+        eventSteam.publish(event: .request(finalRequest))
+
         return platform
             .executeRequest(finalRequest)
-            .tryMap { (data: Data, response: URLResponse) in
+            .tryMap { [weak self] (data: Data, response: URLResponse) in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw NetworkError(error: URLError(.badServerResponse), statusCode: NetworkError.unexpectedServerErrorCode)
                 }
 
                 let successStatusCode = 200
                 if httpResponse.statusCode == successStatusCode {
-                    return NetworkResponse(payload: data)
+                    let response = NetworkResponse(payload: data)
+                    self?.eventSteam.publish(event: .response(response))
+                    return response
                 }
 
                 throw NetworkError(error: URLError(.badServerResponse), statusCode: httpResponse.statusCode)
-            }.mapError {
-                if let networkError = $0 as? NetworkError {
-                    return networkError
+            }.mapError { [weak self] in
+                let networkError: NetworkError
+                if let existingError = $0 as? NetworkError {
+                    networkError = existingError
+                } else {
+                    networkError = NetworkError(error: $0, statusCode: NetworkError.localErrorCode)
                 }
 
-                return NetworkError(error: $0, statusCode: NetworkError.localErrorCode)
+                self?.eventSteam.publish(event: .error(networkError))
+                return networkError
             }.eraseToAnyPublisher()
     }
 }

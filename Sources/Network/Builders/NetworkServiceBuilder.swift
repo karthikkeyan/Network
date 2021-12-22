@@ -16,7 +16,9 @@ public struct NetworkServiceBuilder {
         self.infoProviders = infoProviders
     }
 
-    public func build() -> NetworkRequesting {
-        NetworkService(platform: platform, infoProviders: infoProviders)
+    public func build() -> NetworkComponents {
+        let stream = NetworkEventStream()
+        let service = NetworkService(platform: platform, infoProviders: infoProviders, eventSteam: stream)
+        return NetworkComponents(service: service, eventPublisher: stream.publisher)
     }
 }
