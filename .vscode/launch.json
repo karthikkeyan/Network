@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Run All Tests",
+            "program": "/Applications/Xcode.app/Contents/Developer/usr/bin/xctest",
+            "args": [
+                ".build/debug/NetworkPackageTests.xctest"
+            ],
+            "cwd": "${workspaceFolder:Network}",
+            "preLaunchTask": "swift: Build All"
+        }
+    ]
+}
