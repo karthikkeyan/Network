@@ -1,1 +1,18 @@
-{}
+{
+    "swift-coverage.coverageFilePattern": "**/.build/*/debug/{coverage,codecov}/*.json",
+    "swift-coverage.highlightsCoveredText": false,
+    "swift-coverage.highlightsNotCoveredText": true,
+    "swift-coverage.coveredTextBackground.dark": "rgba(48, 209, 88, 0.25)",
+    "swift-coverage.coveredTextBackground.light": "rgba(52, 199, 89, 0.25)",
+    "swift-coverage.notCoveredTextBackground.dark": "rgba(255, 69, 58, 0.25)",
+    "swift-coverage.notCoveredTextBackground.light": "rgba(255, 59, 48, 0.25)",
+    "swift-coverage.highlightsCoveredGutter": true,
+    "swift-coverage.highlightsNotCoveredGutter": true,
+    "swift-coverage.highlightsMixedGutter": true,
+    "swift-coverage.coveredGutterIcon.dark": "green indicator (builtin)",
+    "swift-coverage.coveredGutterIcon.light": "green indicator (builtin)",
+    "swift-coverage.notCoveredGutterIcon.dark": "red indicator (builtin)",
+    "swift-coverage.notCoveredGutterIcon.light": "red indicator (builtin)",
+    "swift-coverage.mixedGutterIcon.dark": "orange indicator (builtin)",
+    "swift-coverage.mixedGutterIcon.light": "orange indicator (builtin)"
+}

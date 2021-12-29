@@ -3,7 +3,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Run All Tests",
+            "name": "Test Network",
             "program": "/Applications/Xcode.app/Contents/Developer/usr/bin/xctest",
             "args": [
                 ".build/debug/NetworkPackageTests.xctest"

@@ -56,9 +56,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NetworkTestUtilities"
-               BuildableName = "NetworkTestUtilities"
-               BlueprintName = "NetworkTestUtilities"
+               BlueprintIdentifier = "CombineUtilities"
+               BuildableName = "CombineUtilities"
+               BlueprintName = "CombineUtilities"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Network_NetworkInstrumentationTests"
+               BuildableName = "Network_NetworkInstrumentationTests"
+               BlueprintName = "Network_NetworkInstrumentationTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>

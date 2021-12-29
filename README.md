@@ -43,3 +43,11 @@ A simple HTTP library for Client-Server communication.
 7. Given a network service
     when a error occured during the network call
     then the error is emitted to a error publisher
+
+8. Given a network service
+    when a upload request is received
+    then the reqeust is sent to the server
+
+9. Given a network service
+    when a upload request received a progress
+    then the progress report is sent to the consumer

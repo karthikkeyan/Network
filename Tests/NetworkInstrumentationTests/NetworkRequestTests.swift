@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import Network
 import Combine
-import NetworkTestUtilities
+import CombineUtilities
 
 final class NetworkRequestTests: XCTestCase {
 

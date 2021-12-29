@@ -13,7 +13,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "Network",
-            targets: ["Network", "NetworkTestUtilities"]),
+            targets: ["Network", "CombineUtilities"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -24,15 +24,23 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "Network",
-            dependencies: []),
+            dependencies: ["CombineUtilities"]),
         .target(
-            name: "NetworkTestUtilities",
+            name: "CombineUtilities",
             dependencies: []),
         .testTarget(
             name: "NetworkInstrumentationTests",
-            dependencies: ["Network", "NetworkTestUtilities"]),
+            dependencies: ["Network", "CombineUtilities"],
+            resources: [
+                .process("Resources/")
+            ]
+        ),
         .testTarget(
             name: "NetworkUnitTests",
-            dependencies: ["Network", "NetworkTestUtilities"]),
+            dependencies: ["Network", "CombineUtilities"],
+            resources: [
+                .process("Resources/")
+            ]
+        ),
     ]
 )

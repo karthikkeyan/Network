@@ -10,4 +10,6 @@ import Combine
 
 public protocol NetworkRequesting {
     func send(request: URLRequest) -> AnyPublisher<NetworkResponse, NetworkError>
+
+    func upload(file: URL, with request: URLRequest) -> AnyPublisher<NetworkResponse, NetworkError>
 }

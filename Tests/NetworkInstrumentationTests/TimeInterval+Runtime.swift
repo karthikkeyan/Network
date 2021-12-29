@@ -7,6 +7,6 @@
 
 import Foundation
 
-public extension TimeInterval {
+extension TimeInterval {
     static let instrumentationTestRuntime = 2.0
 }

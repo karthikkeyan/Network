@@ -12,6 +12,7 @@ import Combine
 final class MockURLSession: NetworkPlatform {
     
     var recentRequest: URLRequest?
+    var recentFileURL: URL!
     var isHttpResonse = true
 
     var result: Result<(Data, Int), URLError> = {
@@ -39,5 +40,11 @@ final class MockURLSession: NetworkPlatform {
                 promise(.failure(error))
             }
         }.eraseToAnyPublisher()
+    }
+    
+    func executeUpload(_ file: URL, with request: URLRequest) -> AnyPublisher<(Data?, URLResponse?), Error> {
+        recentRequest = request
+        recentFileURL = file        
+        return Empty<(Data?, URLResponse?), Error>().eraseToAnyPublisher()
     }
 }

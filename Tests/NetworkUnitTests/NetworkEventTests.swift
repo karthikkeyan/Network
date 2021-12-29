@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 import Network
-import NetworkTestUtilities
+import CombineUtilities
 import XCTest
 
 final class NetworkEventTests: XCTestCase {

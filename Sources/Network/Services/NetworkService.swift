@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import CombineUtilities
 
 final class NetworkService: NetworkRequesting {
     private let platform: NetworkPlatform
@@ -20,38 +21,74 @@ final class NetworkService: NetworkRequesting {
     }
 
     func send(request: URLRequest) -> AnyPublisher<NetworkResponse, NetworkError> {
-        var finalRequest = request
-        for infoProvider in infoProviders {
-            finalRequest = infoProvider.addInfo(to: finalRequest)
-        }
-
+        let finalRequest = requestWithInfoAdded(for: request)
         eventSteam.publish(event: .request(finalRequest))
 
         return platform
             .executeRequest(finalRequest)
-            .tryMap { [weak self] (data: Data, response: URLResponse) in
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    throw NetworkError(error: URLError(.badServerResponse), statusCode: NetworkError.unexpectedServerErrorCode)
-                }
+            .tryMap(NetworkService.tryMap)
+            .mapError(NetworkService.mapError)
+            .publishEvent(to: eventSteam)
+            .eraseToAnyPublisher()
+    }
 
-                let successStatusCode = 200
-                if httpResponse.statusCode == successStatusCode {
-                    let response = NetworkResponse(payload: data)
-                    self?.eventSteam.publish(event: .response(response))
-                    return response
-                }
+    func upload(file: URL, with request: URLRequest) -> AnyPublisher<NetworkResponse, NetworkError> {
+        let finalRequest = requestWithInfoAdded(for: request)
+        eventSteam.publish(event: .request(finalRequest))
 
-                throw NetworkError(error: URLError(.badServerResponse), statusCode: httpResponse.statusCode)
-            }.mapError { [weak self] in
-                let networkError: NetworkError
-                if let existingError = $0 as? NetworkError {
-                    networkError = existingError
-                } else {
-                    networkError = NetworkError(error: $0, statusCode: NetworkError.localErrorCode)
-                }
+        return platform
+            .executeUpload(file, with: request)
+            .tryMap(NetworkService.tryMap)
+            .mapError(NetworkService.mapError)
+            .publishEvent(to: eventSteam)
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: Private Methods
+    
+    private func requestWithInfoAdded(for request: URLRequest) -> URLRequest {
+        var finalRequest = request
+        for infoProvider in infoProviders {
+            finalRequest = infoProvider.addInfo(to: finalRequest)
+        }
+        return finalRequest
+    }
+    
+    // MARK: Private Static Methods
+    
+    static private func tryMap(_ input: (Data?, URLResponse?)) throws -> NetworkResponse {
+        guard let httpResponse = input.1 as? HTTPURLResponse else {
+            throw NetworkError(error: URLError(.badServerResponse), statusCode: NetworkError.unexpectedServerErrorCode)
+        }
 
-                self?.eventSteam.publish(event: .error(networkError))
-                return networkError
-            }.eraseToAnyPublisher()
+        let successStatusCode = 200
+        if httpResponse.statusCode == successStatusCode {
+            let response = NetworkResponse(payload: input.0)
+            return response
+        }
+
+        throw NetworkError(error: URLError(.badServerResponse), statusCode: httpResponse.statusCode)
+    }
+
+    static private func mapError(_ input: Error) -> NetworkError {
+        let networkError: NetworkError
+        if let existingError = input as? NetworkError {
+            networkError = existingError
+        } else {
+            networkError = NetworkError(error: input, statusCode: NetworkError.localErrorCode)
+        }
+        return networkError
+    }
+}
+
+// MARK: - Combine Utilities
+
+private extension Publisher where Output == NetworkResponse, Failure == NetworkError {
+    func publishEvent(to stream: NetworkEventStream) -> AnyPublisher<Output, Failure> {
+        onValue {
+            stream.publish(event: .response($0))
+        }.onError {
+            stream.publish(event: .error($0))
+        }
     }
 }
