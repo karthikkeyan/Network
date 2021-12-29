@@ -28,7 +28,7 @@ final class NetworkRequestTests: XCTestCase {
     }
 
     func testGivenANetworkService_whenAResponseIsReceivedFromServer_thenTheResponseIsReturnedToTheConsumer() throws {
-        let url = URL(string: "https://run.mocky.io/v3/0bdf8704-7b78-4d09-b773-2b3567e2d9b1")!
+        let url = URL(string: "http://127.0.0.1:3000/data/success")!
 
         var isResponseReceived = false
         let request = URLRequest(url: url)

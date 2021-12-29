@@ -31,6 +31,7 @@ let package = Package(
         .testTarget(
             name: "NetworkInstrumentationTests",
             dependencies: ["Network", "CombineUtilities"],
+            exclude: ["LocalServer/"],
             resources: [
                 .process("Resources/")
             ]
