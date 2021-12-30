@@ -1,5 +1,5 @@
 //
-//  NetworkEventTests.swift
+//  EventTests.swift
 //  
 //
 //  Created by Karthikkeyan Bala Sundaram on 2021-12-21.
@@ -11,7 +11,7 @@ import Network
 import CombineUtilities
 import XCTest
 
-final class NetworkEventTests: XCTestCase {
+final class EventTests: XCTestCase {
     private var service: NetworkRequesting!
     private var eventPublisher: AnyPublisher<NetworkEvent, Never>!
     private var platform: MockURLSession!

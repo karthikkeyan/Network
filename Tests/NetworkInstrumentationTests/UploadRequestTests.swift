@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  UploadRequestTests.swift
 //  
 //
 //  Created by Karthikkeyan Bala Sundaram on 2021-12-29.
@@ -11,7 +11,7 @@ import Network
 import Combine
 import CombineUtilities
 
-final class UploadTests: XCTestCase {
+final class UploadRequestTests: XCTestCase {
 
     private var service: NetworkRequesting!
     private var bag: Set<AnyCancellable>!

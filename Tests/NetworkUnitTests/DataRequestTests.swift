@@ -1,5 +1,5 @@
 //
-//  NetworkRequestTests.swift
+//  DataRequestTests.swift
 //  
 //
 //  Created by Karthikkeyan Bala Sundaram on 2021-12-10.
@@ -11,7 +11,7 @@ import Network
 import Combine
 import CombineUtilities
 
-final class NetworkRequestTests: XCTestCase {
+final class DataRequestTests: XCTestCase {
 
      private var service: NetworkRequesting!
      private var platform: MockURLSession!
