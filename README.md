@@ -51,3 +51,23 @@ A simple HTTP library for Client-Server communication.
 9. Given a network service
     when a upload request received a progress
     then the progress report is sent to the consumer
+
+
+## Tests
+
+All unit tests are mocked with `MockURLSession` so it will run without any issue. However in order to run the instrumentation tests(`NetworkInstrumentationTests`), kick start the local node server,
+
+```
+// install node in your local machine before
+// `brew install node`
+
+node Tests/NetworkInstrumentationTests/LocalServer/index.js
+```
+
+Also you could chain the `node` and `swift test` command in your CI,
+
+```
+// cd PATH_TO_SOURCE_ROOT_DIR
+
+node Tests/NetworkInstrumentationTests/LocalServer/index.js & swift test
+```

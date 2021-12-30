@@ -17,3 +17,5 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: node Tests/NetworkInstrumentationTests/LocalServer/index.js & swift test -v
+    - name: Tear Down
+      run: killall node
